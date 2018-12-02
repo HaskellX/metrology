@@ -1,9 +1,15 @@
 package DAO;
 
+
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
+@Table(name = "authors")
 public class Author {
 
 
@@ -55,11 +61,14 @@ public class Author {
         this.id = id;
     }
 
-
+    @Id
+    @GeneratedValue
+    private long id;
     private String FIO;
     private Date BirthDate;
     private String PlaceBirth;
     private String Genre;
     private String Alias;
-    private long id;
+
+
 }

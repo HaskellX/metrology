@@ -26,7 +26,7 @@ public class TrackController {
         if(track == null){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        if(track.getAuthor() == 0){
+        if(track.getAuthor() == null){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         if(track.getCreationDate() < 1){
@@ -44,11 +44,9 @@ public class TrackController {
         try {
             Track newTrack = new Track();
             tr = session.beginTransaction();
-            newTrack.setAuthor(track.getId());
-            newTrack.setCreationDate(track.getCreationDate());
-            newTrack.setId(track.getId());
-            newTrack.setTitle(track.getTitle());
+            session.save(newTrack);
             tr.commit();
+            return new ResponseEntity(HttpStatus.OK);
         }
         catch (HibernateException ex)
         {
@@ -61,7 +59,7 @@ public class TrackController {
         finally{
             session.close();
         }
-        return new ResponseEntity(HttpStatus.OK);
+
     }
 
     @RequestMapping("/deletetrack/{id}")
@@ -112,7 +110,6 @@ public class TrackController {
 
     @GetMapping("/getbyname/{name}")
     public ResponseEntity GetByName(String name) {
-
         if (name == null) return new ResponseEntity(HttpStatus.BAD_REQUEST);
         final Session session = Application.getSession();
         Transaction tr = null;

@@ -1,11 +1,14 @@
 package DAO;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 
 @Entity
+@Table(name = "albums")
 public class Album {
+    @Id
+    @GeneratedValue
     private long id;
     private String title;
 
@@ -68,6 +71,9 @@ public class Album {
     private Date releaseDate;
     private boolean isSingle;
     private boolean isCollection;
+
+    @ManyToMany
     private ArrayList<Track> tracksList;
     private String Genre;
+
 }

@@ -1,11 +1,10 @@
 package DAO;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 
 @Entity
+@Table(name = "tracks")
 public class Track {
 
 
@@ -25,11 +24,11 @@ public class Track {
         this.title = title;
     }
 
-    public long getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(long author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 
@@ -41,22 +40,23 @@ public class Track {
         this.creationDate = creationDate;
     }
 
-    public long getAlbum() {
+    public Album getAlbum() {
         return album;
     }
 
-    public void setAlbum(long album) {
+    public void setAlbum(Album album) {
         this.album = album;
     }
 
 
-    private long album;
 
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
-    private long author;
+    private Author author;
     private int creationDate;
-
+    private Album album;
 }
 
