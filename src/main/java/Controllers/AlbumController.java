@@ -4,6 +4,7 @@ import Application.Application;
 import DAO.Album;
 import DAO.Author;
 import DAO.StaticMetamodels.Album_;
+import DAO.StaticMetamodels.Author_;
 import DAO.StaticMetamodels.Track_;
 import DAO.Track;
 import org.hibernate.HibernateException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.JoinTable;
 import javax.persistence.criteria.*;
+import javax.persistence.metamodel.SingularAttribute;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -49,7 +51,7 @@ public class AlbumController {
 
     }
 
-    @RequestMapping("/deletealbum/{id}")
+    @GetMapping("/deletealbum/{id}")
     public ResponseEntity DeleteTrack(long id) {
         if(id < 1) return new ResponseEntity(HttpStatus.BAD_REQUEST);
         final Session session = Application.getSession();
@@ -123,7 +125,7 @@ public class AlbumController {
             CriteriaQuery<Track> criteria = builder.createQuery(Track.class);
             Root<Track> root = criteria.from(Track.class);
             criteria.select(root);
-            criteria.where(builder.equal(root.get(Track_.album), id));
+            criteria.where(builder.equal(root.get(Track_.album), track.getId()));
             Collection<Track> tracks = session.createQuery(criteria).getResultList();
             return new ResponseEntity(tracks, HttpStatus.OK);
         } catch (HibernateException ex) {
@@ -134,21 +136,19 @@ public class AlbumController {
         }
     }
 
-    @GetMapping("/getbyalbum/{id}")
-    public ResponseEntity GetByAuthor(Author author) {
+    @PostMapping("/getbyaauthorname")
+    public ResponseEntity GetByAuthorName(Author author) {
 
-        if (id < 1) return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        if (author == null) return new ResponseEntity(HttpStatus.BAD_REQUEST);
         final Session session = Application.getSession();
         try {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Album> criteria = builder.createQuery(Album.class);
             Root<Album> mainTable = criteria.from(Album.class);
-            mainTable.join(Track_.album, JoinType.INNER);
+            Join<Album, Track> join = mainTable.join(Album_.tracksList, JoinType.INNER);
+            Join<Track, Author> join2 = join.join(Track_.author, JoinType.INNER);
             criteria.select(mainTable);
-
-            List<Predicate> predicates = new ArrayList<>();
-
-            criteria.where(builder.equal(mainTable.get(Album_.author), new Author().setId(author);));
+            criteria.where(builder.equal(join2.get(Author_.fio), author.getFIO()));
             Collection<Album> tracks = session.createQuery(criteria).getResultList();
             return new ResponseEntity(tracks, HttpStatus.OK);
         } catch (HibernateException ex) {

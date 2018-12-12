@@ -5,8 +5,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
+@SpringBootApplication
 public class Application {
     private static final SessionFactory ourSessionFactory;
 
@@ -26,6 +28,8 @@ public class Application {
     }
 
     public static void main(final String[] args) throws Exception {
+
+        var x = 11;
         SpringApplication.run(Application.class, args);
         final Session session = getSession();
 //        try {

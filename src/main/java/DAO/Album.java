@@ -72,7 +72,7 @@ public class Album {
     private boolean isSingle;
     private boolean isCollection;
 
-    @ManyToMany
+    @OneToMany
     private ArrayList<Track> tracksList;
     private String Genre;
 

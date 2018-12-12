@@ -57,6 +57,7 @@ public class Track {
     private String title;
     private Author author;
     private int creationDate;
+    @ManyToOne
     private Album album;
 }
 
